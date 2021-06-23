@@ -757,15 +757,15 @@ type UserDataHeader struct {
 func (udh *UserDataHeader) ReadForm(octets []byte) error {
 	octetsLng := len(octets)
 	headerLng := int(octets[0]) + 1
-	if (octetsLng-headerLng) <= 0 || headerLng <= 5 {
+	if (octetsLng-headerLng) <= 0 || headerLng <= 5 || headerLng-3 < 1 {
 		return ErrIncorrectUserDataHeaderLength
 	}
 
 	h := octets[:headerLng]
 
-	udh.Sequence = int(h[5])
-	udh.TotalNumber = int(h[4])
-	udh.Tag = int(h[3])
+	udh.Sequence = int(h[headerLng-1])
+	udh.TotalNumber = int(h[headerLng-2])
+	udh.Tag = int(h[headerLng-3])
 
 	return nil
 }
